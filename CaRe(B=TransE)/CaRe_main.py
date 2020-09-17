@@ -2,6 +2,7 @@
 
 import argparse
 
+from CaRe_main import ConvEParam
 from utils import *
 from encoder import GRUEncoder
 from cn_variants import LAN, GCN, GAT
