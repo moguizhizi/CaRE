@@ -40,7 +40,8 @@ class load_data():
                     word, vec = line.split(' ', 1)
                     if word in word2id:
                         word_embed[word2id[word]] = np.fromstring(vec, sep=' ')
-        else: print("word embeddings are randomly initialized")
+        else:
+            print("word embeddings are randomly initialized")
 
         wordkeys = word2id.values()
         a = [words for words in wordkeys if words not in word_embed]
@@ -112,10 +113,11 @@ class load_data():
                 ID+=1
                 unique_clusts.append(clust)
                 ent_list.extend(line[2:])
-                for ent in clust: entid2clustid[ent] = ID
-        return ent_clusts,entid2clustid,unique_clusts
-    
-    def get_edges(self,ent_clusts):
+                for ent in clust:
+                    entid2clustid[ent] = ID
+        return ent_clusts, entid2clustid, unique_clusts
+
+    def get_edges(self, ent_clusts):
         head_list = []
         tail_list = []
         for ent in ent_clusts:
@@ -141,10 +143,10 @@ class load_data():
         self.true_clusts, self.entid2clustid,_ = self.get_clusters(self.data_files["gold_npclust_path"])
         
         self.get_edges(self.canon_clusts)
-        
-        self.train_trips,self.rel2id,self.label_graph = self.get_train_triples(self.data_files["train_trip_path"],
-                                                                               self.entid2clustid,self.rel2id, 
-                                                                               self.id2rel)
+
+        self.train_trips, self.rel2id, self.label_graph = self.get_train_triples(self.data_files["train_trip_path"],
+                                                                                 self.entid2clustid, self.rel2id,
+                                                                                 self.id2rel)
 
         self.test_trips = self.get_test_triples(self.data_files["test_trip_path"],self.rel2id, self.id2rel)
         self.valid_trips = self.get_test_triples(self.data_files["valid_trip_path"],self.rel2id, self.id2rel)
