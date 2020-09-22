@@ -1,15 +1,7 @@
-import numpy as np
-
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
-import torch.cuda as cuda
-import torch.optim as optim
-from torch.nn.utils.rnn import pack_padded_sequence as pack
-from torch.nn.utils.rnn import pad_packed_sequence as unpack
 import torch.nn.functional as F
 
-from torch_geometric.data import Data
 from torch_geometric.nn import MessagePassing
 from torch_geometric.utils import remove_self_loops, add_self_loops, softmax, degree
 
@@ -74,7 +66,7 @@ class GAT(MessagePassing):
         self.dropout = dropout
 
         self.weight = nn.Parameter(torch.Tensor(in_channels,
-                                             heads * out_channels))
+                                                heads * out_channels))
         self.att = nn.Parameter(torch.Tensor(1, heads, 2 * out_channels))
 
         if bias and concat:
