@@ -1,16 +1,12 @@
-import numpy as np
-import random
-import copy
+import warnings
 import time
 
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-import torch.cuda as cuda
-import torch.optim as optim
 import torch.nn.functional as F
 
-import warnings
 warnings.filterwarnings("ignore")
 
 def seq_batch(phrase_id, args, phrase2word):
@@ -50,15 +46,18 @@ def get_rank(scores,clust,Hits,entid2clustid,filter_clustID):
     rank = 1
     high_rank_clust = set()
     for i in range(scores.shape[0]):
-        if scores[i] in clust: break
+        if scores[i] in clust:
+            break
         else:
             if entid2clustid[scores[i]] not in high_rank_clust and entid2clustid[scores[i]] not in filter_clustID:
                 rank+=1
                 high_rank_clust.add(entid2clustid[scores[i]])
-    for i,r in enumerate(Hits):
-        if rank>r: hits[i]=0
-        else: break
-    return rank,hits
+    for i, r in enumerate(Hits):
+        if rank > r:
+            hits[i] = 0
+        else:
+            break
+    return rank, hits
 
 
 def evaluate(model, entTotal, test_trips, args, data):
@@ -116,13 +115,15 @@ def evaluate(model, entTotal, test_trips, args, data):
             T_inv_Rank.append(1/T_r) 
             T_Hits += T_h
     print("Mean Rank: Head = {}  Tail = {}  Avg = {}"
-          .format(np.mean(np.array(H_Rank)),np.mean(np.array(T_Rank)),(np.mean(np.array(H_Rank)) + np.mean(np.array(T_Rank)))/2))
+          .format(np.mean(np.array(H_Rank)), np.mean(np.array(T_Rank)),
+                  (np.mean(np.array(H_Rank)) + np.mean(np.array(T_Rank))) / 2))
     print("MRR: Head = {}  Tail = {}  Avg = {}"
-          .format(np.mean(np.array(H_inv_Rank)),np.mean(np.array(T_inv_Rank)),(np.mean(np.array(H_inv_Rank)) + np.mean(np.array(T_inv_Rank)))/2))
-    
-    for i,hits in enumerate(args.Hits):
+          .format(np.mean(np.array(H_inv_Rank)), np.mean(np.array(T_inv_Rank)),
+                  (np.mean(np.array(H_inv_Rank)) + np.mean(np.array(T_inv_Rank))) / 2))
+
+    for i, hits in enumerate(args.Hits):
         print("Hits@{}: Head = {}  Tail={}  Avg = {}"
-              .format(hits,H_Hits[i]/len(H_Rank),T_Hits[i]/len(H_Rank),(H_Hits[i] + T_Hits[i])/(2*len(H_Rank))))
-    return (np.mean(np.array(H_Rank)) + np.mean(np.array(T_Rank)))/2,(np.mean(np.array(H_inv_Rank)) + np.mean(np.array(T_inv_Rank)))/2
-
-
+              .format(hits, H_Hits[i] / len(H_Rank), T_Hits[i] / len(H_Rank),
+                      (H_Hits[i] + T_Hits[i]) / (2 * len(H_Rank))))
+    return (np.mean(np.array(H_Rank)) + np.mean(np.array(T_Rank))) / 2, (
+                np.mean(np.array(H_inv_Rank)) + np.mean(np.array(T_inv_Rank))) / 2
