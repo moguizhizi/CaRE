@@ -30,7 +30,7 @@ class GCN(MessagePassing):
         self.lin = torch.nn.Linear(in_channels, out_channels)
 
     def forward(self, x, edge_index):
-        
+        edge_index, _ = remove_self_loops(edge_index)
         edge_index = add_self_loops(edge_index, num_nodes=x.size(0))
         x = self.lin(x)
         return self.propagate(edge_index, Shape = (x.size(0), x.size(0)), x = x)
