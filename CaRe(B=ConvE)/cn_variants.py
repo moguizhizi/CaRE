@@ -18,7 +18,7 @@ class LAN(MessagePassing):
         deg = degree(row, Shape[0], dtype=x_j.dtype)
         deg_inv = deg.pow(-1.0)
 
-        return deg_inv[row].view(-1, 1) * x_j
+        return deg_inv[col].view(-1, 1) * x_j
 
     def update(self, h_prime,x):                
         return  x/2 + h_prime/2
