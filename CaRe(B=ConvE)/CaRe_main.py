@@ -167,7 +167,7 @@ def main(args):
         if (epoch + 1) % args.eval_epoch == 0:
             model.eval()
             MR, MRR = evaluate(model, args.num_nodes, data.valid_trips, args, data)
-            if MRR > best_MRR or MR < best_MR:
+            if MRR > best_MRR and MR < best_MR:
                 count = 0
                 if MRR > best_MRR: best_MRR = MRR
                 if MR < best_MR: best_MR = MR
