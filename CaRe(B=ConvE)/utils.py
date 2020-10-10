@@ -123,7 +123,7 @@ def evaluate(model, entTotal, test_trips, args, data):
 
     for i, hits in enumerate(args.Hits):
         print("Hits@{}: Head = {}  Tail={}  Avg = {}"
-              .format(hits, H_Hits[i] / len(H_Rank), T_Hits[i] / len(H_Rank),
-                      (H_Hits[i] + T_Hits[i]) / (2 * len(H_Rank))))
+              .format(hits, H_Hits[i] / len(H_Rank), T_Hits[i] / len(T_Rank),
+                      (H_Hits[i] + T_Hits[i]) / (len(H_Rank) + len(T_Rank))))
     return (np.mean(np.array(H_Rank)) + np.mean(np.array(T_Rank))) / 2, (
                 np.mean(np.array(H_inv_Rank)) + np.mean(np.array(T_inv_Rank))) / 2
